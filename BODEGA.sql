@@ -235,8 +235,8 @@ GO
 SELECT * FROM CARGO
 ----- REGISTRO DE CARGO ----------
 INSERT INTO CARGO (COD_CARGO,NOMBRE_CARGO,SUELDO,DESCRIPCION) VALUES
-('C001','Dueño',1900.00,'Supervisa las operaciones'),
-('C002','Operario de almacén',1100.00,'se encarga de ver el nventario '),
+('C001','DueÃ±o',1900.00,'Supervisa las operaciones'),
+('C002','Operario de almacÃ©n',1100.00,'se encarga de ver el nventario '),
 ('C003','Vendedor',1100.00,''),
 ('C004','Responsable de compras',1100.00,'')
 GO
@@ -253,11 +253,11 @@ GO
 SELECT * FROM [dbo].[CLIENTE]
 --- REGISTRO DE CLIENTE -----
 INSERT INTO CLIENTE (COD_CLIENTE,NOMBRES,APELLIDOS,SEXO,DNI,TELEFONO,DIRECCION,OBSERVACIONES) VALUES
-('CL001','MARIA','LOPEZ','F','4512345','968576543','AV VENEZUELA 357','LA MEJOR CLIENTA'),
-('CL002','ALEX','TORRES','M','3219876','987694656','JR AGUSTINO 589','xd'),
-('CL003','ROSA','ALVARE','F','2987654','956674565','JR CASTILLA 102','TIMIDA'),
-('CL004','NELLY','ELVIRA','F','4123456','956735456','AV TUPAC 894','MUY BONITA'),
-('CL005','MILLY','MORENO','F','3876543','956455454','CALLE PERU 258','SOLO SABE RECLAMAR'),
+('CL001','MARIA','LOPEZ','F','45123452','968576549','AV VENEZUELA 357','LA MEJOR CLIENTA'),
+('CL002','ALEX','TORRES','M','32198762','987694659','JR AGUSTINO 589','xd'),
+('CL003','ROSA','ALVARE','F','29876545','956674569','JR CASTILLA 102','TIMIDA'),
+('CL004','NELLY','ELVIRA','F','41234565','956735456','AV TUPAC 894','MUY BONITA'),
+('CL005','MILLY','MORENO','F','38765435','956455454','CALLE PERU 258','SOLO SABE RECLAMAR'),
 ('CL006','DEISY','ALVAREZ','F','27654321','954565767','JR TACNA 156','ME CAE MAL XD'),
 ('CL007','CARLOS','QUISPE','M','41256789','987123456','AV.ABANCAY 234','MUY PUNTUAL'),
 ('CL008','ANA','GARCIA','F','32145678','956234567','JR.HUALLAGA 456','MUY AMABLE'),
@@ -275,7 +275,7 @@ INSERT INTO CLIENTE (COD_CLIENTE,NOMBRES,APELLIDOS,SEXO,DNI,TELEFONO,DIRECCION,O
 ('CL020','DIANA','SILVA','F','32109876','922456789','JR.ICA 852','MUY AGRADABLE'),
 ('CL021','RAUL','PEREZ','M','21098765','911567890','AV.JAVIER PRADO 963','POCO AMABLE'),
 ('CL022','VANESSA','GUTIERREZ','F','10987654','900678901','CALLE LOS OLMOS 174','MUY EDUCADA'),
-('CL023','HUGO','ESPINOZA','M','98765432','989789012','AV.BENAVIDES 285','GRUÑON'),
+('CL023','HUGO','ESPINOZA','M','98765432','989789012','AV.BENAVIDES 285','GRUÃ‘ON'),
 ('CL024','MONICA','RAMOS','F','87654320','978890123','JR.LORETO 396','SIEMPRE SONRIENTE'),
 ('CL025','ANTONIO','DIAZ','M','76543219','967901234','AV.LA MARINA 417','MUY DESCONFIADO'),
 ('CL026','ELIZABETH','CAMPOS','F','65432108','956012345','CALLE LAS FLORES 528','SUPER AMABLE'),
@@ -340,15 +340,15 @@ INSERT INTO MARCA (COD_MARCA,NOMBRE,DESCRIPCION,OBSERVACIONES) VALUES
 ('M008','FABER CASTELL','','POCO DEMANDADO'),
 ('M009','ARTESCO','','DEMANDADO'),
 ('M010','ARTESCO','CUADERNOS Y UTILES','DEMANDADO'),
-('M010','ARTESCO','CUADERNOS Y UTILES','DEMANDADO'),
-('M011','DONOFRIO','HELADOS Y GOLOSINAS','MUY DEMANDADO'),
-('M012','SAN FERNANDO','CARNES Y EMBUTIDOS','MUY DEMANDADO'),
-('M013','LAIVE','LACTEOS Y EMBUTIDOS','DEMANDADO'),
-('M014','NESTLE','CHOCOLATES Y CEREALES','MUY DEMANDADO'),
-('M015','BIMBO','PANES Y PASTELES','DEMANDADO'),
-('M016','SAPOLIO','LIMPIEZA Y DESINFECCION','POCO DEMANDADO'),
-('M017','HEAD SHOULDERS','CUIDADO CAPILAR','POCO DEMANDADO'),
-('M018','MOLITALIA','FIDEOS Y PASTAS','MUY DEMANDADO')
+('M011','ARTESCO','CUADERNOS Y UTILES','DEMANDADO'),
+('M012','DONOFRIO','HELADOS Y GOLOSINAS','MUY DEMANDADO'),
+('M013','SAN FERNANDO','CARNES Y EMBUTIDOS','MUY DEMANDADO'),
+('M014','LAIVE','LACTEOS Y EMBUTIDOS','DEMANDADO'),
+('M015','NESTLE','CHOCOLATES Y CEREALES','MUY DEMANDADO'),
+('M016','BIMBO','PANES Y PASTELES','DEMANDADO'),
+('M017','SAPOLIO','LIMPIEZA Y DESINFECCION','POCO DEMANDADO'),
+('M018','HEAD SHOULDERS','CUIDADO CAPILAR','POCO DEMANDADO'),
+('M019','MOLITALIA','FIDEOS Y PASTAS','MUY DEMANDADO')
 
 GO
 SELECT * FROM[dbo].[PRODUCTO]
@@ -361,11 +361,11 @@ INSERT INTO PRODUCTO (COD_PRODUCTO,NOMBRE,PRECIO,DESCRIPCION,OBSERVACIONES,PRO_C
 ('P004','Leche 170gr',2.00,'Leche evaporada semidecremada, rica','Alta deanda','CT001','M001','PR004'),
 ('P005','Tallarines 1kg',4.50,'Pasta de trigo duro laminada en fio','Se agta rapido','CT005','M003','PR003'),
 ('P006','Macarrones 500gr',5.50,'Pasta corta de semola de trigo','Buena salida en invierno','CT005','M003','PR003'),
-('P007','Galleta soda',1.00,'Galleta salada horneada con haina','Favorito de los niños','CT004','M007','PR002'),
+('P007','Galleta soda',1.00,'Galleta salada horneada con haina','Favorito de los niÃ±os','CT004','M007','PR002'),
 ('P008','Galleta ritz',1.50,'Galleta orneada con toque de manteqilla','Muy soliSitado','CT004','M007','PR002'),
 ('P009','Corona personal',4.50,'Cerveza importada tip lager','Poca salida','CT006','M005','PR001'),
 ('P010','Atun Gloria',4.50,'Atun en trozos con aceite vegeta','Producto basico','CT007','M001','PR001'),
-('P011','Yogurt fresa',3.50,'Yogurt batido con trozos d freza natural','Muy pedido por señoras','CT001','M001','PR004'),
+('P011','Yogurt fresa',3.50,'Yogurt batido con trozos d freza natural','Muy pedido por seÃ±oras','CT001','M001','PR004'),
 ('P012','Aceite primor 1L',8.00,'Aceite vegetal de jirasol si colesterol','Esencal en cocina','CT005','M003','PR003'),
 ('P013','Arroz extra 1kg',3.80,'Arroz blanco de grano lago','Nunca falta en tieda','CT005','M003','PR003'),
 ('P014','Azucar rubia 1kg',3.50,'Azucar rubia sin refinar','Consumo diario','CT005','M003','PR003'),
@@ -373,7 +373,7 @@ INSERT INTO PRODUCTO (COD_PRODUCTO,NOMBRE,PRECIO,DESCRIPCION,OBSERVACIONES,PRO_C
 ('P016','Mantequilla 200gr',5.50,'Mantequilla con sal elabOrada','Rotacion morada','CT001','M001','PR004'),
 ('P017','Queso gouda 200gr',8.50,'Queso maduro de origen hoandes','Producto premiun','CT001','M004','PR004'),
 ('P018','Jamon del pais',6.00,'Jamon cosido de cerdo, corte en fetas','Comra semanal','CT008','M004','PR004'),
-('P019','Salchicha 200gr',5.00,'Salchicha frankfurt de polO','Acompaña el desayuno','CT008','M008','PR004'),
+('P019','Salchicha 200gr',5.00,'Salchicha frankfurt de polO','AcompaÃ±a el desayuno','CT008','M008','PR004'),
 ('P020','Panetone 900gr',25.00,'Panetone esponjoso con pasas y fruta','Solo etemporada navidena','CT002','M008','PR002'),
 ('P021','Chocolate sublime',1.50,'Chocolate con leche relleno de mani','Golosina de toda la vida','CT010','M008','PR002'),
 ('P022','Chocolate princesa',1.00,'Bombon de chocolate blanco','Muy comprado por nios','CT010','M008','PR002'),
@@ -387,7 +387,39 @@ INSERT INTO PRODUCTO (COD_PRODUCTO,NOMBRE,PRECIO,DESCRIPCION,OBSERVACIONES,PRO_C
 ('P030','Papel hig. 4 rollos',8.50,'Papel igienico doble hoja ultra suave, 200 ojas','Infaltable en el hogar','CT010','M005','PR005')
 GO
 
-
+SELECT * FROM INVENTARIO
+INSERT INTO INVENTARIO (COD_INVENTARIO,INV_PRO) VALUES
+('I001','P002'),
+('I002','P005'),
+('I003','P001'),
+('I004','P003'),
+('I005','P006'),
+('I006','P004'),
+('I007','P007'),
+('I008','P008'),
+('I009','P009'),
+('I010','P010'),
+('I011','P011'),
+('I012','P012'),
+('I013','P013'),
+('I014','P014'),
+('I015','P015'),
+('I016','P016'),
+('I017','P017'),
+('I018','P018'),
+('I019','P019'),
+('I020','P020'),
+('I021','P021'),
+('I022','P022'),
+('I023','P023'),
+('I024','P024'),
+('I025','P025'),
+('I026','P026'),
+('I027','P027'),
+('I028','P028'),
+('I029','P029'),
+('I030','P030')
+GO
 
 SELECT * FROM[dbo].[PEDIDO]
 ------- REGISTRO DE PEDIDO------
@@ -438,6 +470,43 @@ INSERT INTO PEDIDO (COD_PEDIDO,ESTADO,PED_CLI) VALUES
 ('PD044','ENTREGADO','CL012'),
 ('PD045','PENDIENTE','CL007')
 GO
+
+
+SELECT * FROM [dbo].[DETALLE_PEDIDO]
+INSERT INTO DETALLE_PEDIDO (CANTIDAD,DESCRIPCION,DET_PROD,DET_PED) VALUES
+(5,'Unidad de consumo diario','P001','PD003'),
+(6,'Bebida fria para reunion','P002','PD006'),
+(10,'Pasta para almuerzo familiar','P006','PD005'),
+(7,'Snack para lonchera','P007','PD004'),
+(8,'Bebida importada personal','P005','PD002'),
+(13,'Conserva rica en proteinas','P004','PD001'),
+(4,'Bebida rubia de cebada','P003','PD007'),
+(6,'Pasta larga para sopa','P005','PD008'),
+(3,'Galleta crocante con mantequilla','P008','PD009'),
+(9,'Lacteo batido sabor frutal','P011','PD010'),
+(5,'Grasa vegetal para cocinar','P012','PD011'),
+(7,'Cereal blanco de grano largo','P013','PD012'),
+(4,'Endulzante natural sin refinar','P014','PD013'),
+(8,'Galleta rellena de crema','P015','PD014'),
+(3,'Grasa animal para untar','P016','PD015'),
+(5,'Lacteo maduro de origen europeo','P017','PD016'),
+(6,'Embutido cosido en fetas','P018','PD017'),
+(4,'Embutido de pollo al vapor','P019','PD018'),
+(2,'Pan dulce con frutas confitadas','P020','PD019'),
+(10,'Golosina con mani tostado','P021','PD020'),
+(8,'Bombon de chocolate blanco','P022','PD021'),
+(6,'Instrumento de escritura 2B','P023','PD022'),
+(5,'Libreta escolar de 100 hojas','P024','PD023'),
+(4,'Archivador de cartulina A4','P025','PD024'),
+(7,'Polvo limpiador con enzimas','P026','PD025'),
+(3,'Liquido desinfectante al 5%','P027','PD026'),
+(5,'Cuidado capilar con keratina','P028','PD027'),
+(9,'Barra de lavado multiusos','P029','PD028'),
+(6,'Rollo higienico doble hoja','P030','PD029'),
+(4,'Lacteo evaporado semidescremado','P004','PD030'),
+(7,'Conserva marina en aceite','P010','PD031'),
+(5,'Snack salado horneado','P007','PD030')
+
 
 
 SELECT * FROM[dbo].[VENTA]
@@ -544,82 +613,6 @@ INSERT INTO BOLETA (COD_BOLETA,BOLETA_COMPRO) VALUES
 ('B029','CP029'),
 ('B030','CP030')
 GO
-
-
----- REGISTRO DE INVENTARIO-----
-SELECT * FROM INVENTARIO
-INSERT INTO INVENTARIO (COD_INVENTARIO,INV_PRO) VALUES
-('I001','P002'),
-('I002','P005'),
-('I003','P001'),
-('I004','P003'),
-('I005','P006'),
-('I006','P004'),
-('I007','P007'),
-('I008','P008'),
-('I009','P009'),
-('I010','P010'),
-('I011','P011'),
-('I012','P012'),
-('I013','P013'),
-('I014','P014'),
-('I015','P015'),
-('I016','P016'),
-('I017','P017'),
-('I018','P018'),
-('I019','P019'),
-('I020','P020'),
-('I021','P021'),
-('I022','P022'),
-('I023','P023'),
-('I024','P024'),
-('I025','P025'),
-('I026','P026'),
-('I027','P027'),
-('I028','P028'),
-('I029','P029'),
-('I030','P030')
-GO
-
-
------ REGISTRO DE DETALLE DE PEDIDO ----
-
-SELECT * FROM [dbo].[DETALLE_PEDIDO]
-INSERT INTO DETALLE_PEDIDO (CANTIDAD,DESCRIPCION,DET_PROD,DET_PED) VALUES
-(5,'Unidad de consumo diario','P001','PD003'),
-(6,'Bebida fria para reunion','P002','PD006'),
-(10,'Pasta para almuerzo familiar','P006','PD005'),
-(7,'Snack para lonchera','P007','PD004'),
-(8,'Bebida importada personal','P005','PD002'),
-(13,'Conserva rica en proteinas','P004','PD001'),
-(4,'Bebida rubia de cebada','P003','PD007'),
-(6,'Pasta larga para sopa','P005','PD008'),
-(3,'Galleta crocante con mantequilla','P008','PD009'),
-(9,'Lacteo batido sabor frutal','P011','PD010'),
-(5,'Grasa vegetal para cocinar','P012','PD011'),
-(7,'Cereal blanco de grano largo','P013','PD012'),
-(4,'Endulzante natural sin refinar','P014','PD013'),
-(8,'Galleta rellena de crema','P015','PD014'),
-(3,'Grasa animal para untar','P016','PD015'),
-(5,'Lacteo maduro de origen europeo','P017','PD016'),
-(6,'Embutido cosido en fetas','P018','PD017'),
-(4,'Embutido de pollo al vapor','P019','PD018'),
-(2,'Pan dulce con frutas confitadas','P020','PD019'),
-(10,'Golosina con mani tostado','P021','PD020'),
-(8,'Bombon de chocolate blanco','P022','PD021'),
-(6,'Instrumento de escritura 2B','P023','PD022'),
-(5,'Libreta escolar de 100 hojas','P024','PD023'),
-(4,'Archivador de cartulina A4','P025','PD024'),
-(7,'Polvo limpiador con enzimas','P026','PD025'),
-(3,'Liquido desinfectante al 5%','P027','PD026'),
-(5,'Cuidado capilar con keratina','P028','PD027'),
-(9,'Barra de lavado multiusos','P029','PD028'),
-(6,'Rollo higienico doble hoja','P030','PD029'),
-(4,'Lacteo evaporado semidescremado','P004','PD030'),
-(7,'Conserva marina en aceite','P010','PD031'),
-(5,'Snack salado horneado','P007','PD030')
-
-
 
 ------  REGISTRO DE FACTURA ------
 SELECT * FROM [dbo].[FACTURA]
