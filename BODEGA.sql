@@ -1,4 +1,4 @@
-  -- CREADO AL BASE DE DATOS DE BODEGA ----
+   -- CREADO AL BASE DE DATOS DE BODEGA ----
 
 
  CREATE DATABASE BODEGA
@@ -19,7 +19,7 @@ CREATE TABLE CARGO(
 COD_CARGO CHAR(4) PRIMARY KEY CHECK(COD_CARGO LIKE 'C[0-9][0-9][0-9]'),
 NOMBRE_CARGO VARCHAR(30) NOT NULL,
 SUELDO DECIMAL(10,2) NOT NULL,
-DESCRIPCION VARCHAR(50)
+DESCRIPCION VARCHAR(100)
 )
 GO
 
@@ -110,7 +110,7 @@ GO
 
 CREATE TABLE PRODUCTO(
 COD_PRODUCTO CHAR(4) PRIMARY KEY CHECK(COD_PRODUCTO LIKE 'P[0-9][0-9][0-9]'),
-NOMBRE VARCHAR(20) NOT NULL,
+NOMBRE VARCHAR(40) NOT NULL,
 PRECIO DECIMAL(10,2) NOT NULL,
 DESCRIPCION VARCHAR(100),
 FECHA_REGISTRO DATE DEFAULT GETDATE(),
@@ -139,7 +139,6 @@ GO
 CREATE TABLE VENTA(
 COD_VENTA CHAR(4) PRIMARY KEY CHECK(COD_VENTA LIKE 'V[0-9][0-9][0-9]'),
 HORA TIME(0) DEFAULT(CAST(GETDATE() AS TIME)),
-
 TOTAL_VENTA DECIMAL(10,2) NOT NULL,
 VEN_PED CHAR(5) FOREIGN KEY REFERENCES PEDIDO(COD_PEDIDO),
 VEN_EMP CHAR(4) FOREIGN KEY REFERENCES EMPLEADO(COD_EMPLEADO)
@@ -172,7 +171,6 @@ FACTURA_COMPRO CHAR(5) FOREIGN KEY REFERENCES COMPROBANTE_PAGO(COD_COMPRO_PAGO)
 GO
 
 ----- CREACION DE LA TABLA BOLETA ----
-
 
 
 CREATE TABLE BOLETA(
@@ -209,17 +207,13 @@ DET_PED CHAR(5) FOREIGN KEY REFERENCES PEDIDO(COD_PEDIDO)
 GO
 
 
-
-
 ----CREACION DEL TRIGGER   SUBTOTAL---
-
+GO
 CREATE TRIGGER TG_SUBTOTAL ON DETALLE_PEDIDO AFTER INSERT AS BEGIN
-UPDATE DETALLE_PEDIDO SET SUBTOTAL = i.CANTIDAD * p.PRECIO FROM DETALLE_PEDIDO dp
+UPDATE dp SET dp.SUBTOTAL = i.CANTIDAD * p.PRECIO FROM DETALLE_PEDIDO dp
 INNER JOIN inserted i ON dp.ID_DETALLE_PED = i.ID_DETALLE_PED
 INNER JOIN PRODUCTO p ON p.COD_PRODUCTO = i.DET_PROD
 END
-
-
 GO
 
 
@@ -236,179 +230,172 @@ END
 SELECT name , OBJECT_NAME(parent_id) AS Tabla
 FROM sys.triggers
 
-
-
-
-
-
-SELECT * FROM CARGO
 ----- REGISTRO DE CARGO ----------
+
+
 INSERT INTO CARGO (COD_CARGO,NOMBRE_CARGO,SUELDO,DESCRIPCION) VALUES
-('C001','Dueño',1900.00,'Supervisa las operaciones'),
-('C002','Operario de almacén',1100.00,'se encarga de ver el nventario '),
-('C003','Vendedor',1100.00,''),
-('C004','Responsable de compras',1100.00,'')
+('C001','Dueño',1900.00,'Dirige el negocio, supervisa operaciones y toma decisiones importantes'),
+('C002','Operario de almacén',1100.00,'Organiza productos, controla stock y mantiene orden en el almacén'),
+('C003','Vendedor',1100.00,'Atiende clientes, realiza ventas y orienta sobre los productos disponibles'),
+('C004','Responsable de compras',1100.00,'Gestiona compras, coordina con proveedores y asegura abastecimiento');
 GO
-SELECT * FROM[dbo].[EMPLEADO]
+
 ----- REGISTRO DE EMPLEADO -----
+
+
 INSERT INTO EMPLEADO (COD_EMPLEADO,NOMBRES,APELLIDOS,DNI,SEXO,EMAIL,TELEFONO,CAR_EMPLEA,OBSERVACIONES) VALUES
-('E001','Marleny','Carhuatanta','61278681','F','marleny@gmail.com','945342345','C001','Sabe de su trabajo'),
-('E002','Mariano','Cruzado','94524523','M','mariano@gmail.com','945245233','C004',''),
-('E003','Roxana','Cruzado','85346557','F','roxana@gmail.com','953465576','C002',''),
-('E004','Mariana','Rodas','98674522','F','mariana@gmail.com','986745223','C003','')
+('E001','Marleny','Carhuatanta','61278681','F','marleny@gmail.com','945342345','C001','Responsable en la supervisión del negocio'),
+('E002','Mariano','Cruzado','94524523','M','mariano@gmail.com','945245233','C004','Responsable en la gestión de compras'),
+('E003','Mariana','Rodas','98674522','F','mariana@gmail.com','986745223','C003','Brinda buena atención al cliente');
 GO
 
-
-SELECT * FROM [dbo].[CLIENTE]
 --- REGISTRO DE CLIENTE -----
+
+
 INSERT INTO CLIENTE (COD_CLIENTE,NOMBRES,APELLIDOS,SEXO,DNI,TELEFONO,DIRECCION,OBSERVACIONES) VALUES
-('CL001','MARIA','LOPEZ','F','45123452','968576549','AV VENEZUELA 357','LA MEJOR CLIENTA'),
-('CL002','ALEX','TORRES','M','32198762','987694659','JR AGUSTINO 589','xd'),
-('CL003','ROSA','ALVARE','F','29876545','956674569','JR CASTILLA 102','TIMIDA'),
-('CL004','NELLY','ELVIRA','F','41234565','956735456','AV TUPAC 894','MUY BONITA'),
-('CL005','MILLY','MORENO','F','38765435','956455454','CALLE PERU 258','SOLO SABE RECLAMAR'),
-('CL006','DEISY','ALVAREZ','F','27654321','954565767','JR TACNA 156','ME CAE MAL XD'),
-('CL007','CARLOS','QUISPE','M','41256789','987123456','AV.ABANCAY 234','MUY PUNTUAL'),
-('CL008','ANA','GARCIA','F','32145678','956234567','JR.HUALLAGA 456','MUY AMABLE'),
-('CL009','LUIS','MENDOZA','M','29876512','945345678','AV.AREQUIPA 789','POCO COMUNICATIVO'),
-('CL010','PATRICIA','ROJAS','F','38712345','934456789','CALLE LOS PINOS 123','MU QUEJONA'),
-('CL011','JORGE','FLORES','M','45678901','923567890','AV.BRASIL 567','IMPACIENTE'),
-('CL012','CARMEN','HUAMAN','F','34567890','912678901','JR.CUSCO 890','MUY CODIAL'),
-('CL013','ROBERTO','CASTRO','M','23456789','901789012','AV.COLONIAL 321','DESCONFIADO'),
-('CL014','LUCIA','VARGAS','F','12345698','998890123','CALLE LAS ROSAS 654','MUY SIMPATICA'),
-('CL015','MIGUEL','PAREDES','M','87654321','977901234','AV.VENEZUELA 987','RESERVADO'),
-('CL016','SANDRA','LEON','F','76543210','966012345','JR.AMAZONAS 147','SIEMPRE QUEJOSA'),
-('CL017','FERNANDO','REYES','M','65432109','955123456','AV.TUPAC AMARU 258','MUY EIGENTE'),
-('CL018','GLORIA','JIMENEZ','F','54321098','944234567','CALLE UNION 369','MUY ATNTA'),
-('CL019','CESAR','TORRES','M','43210987','933345678','AV.UNIVERSITARIA 741','ALGO IMPACIENTE'),
-('CL020','DIANA','SILVA','F','32109876','922456789','JR.ICA 852','MUY AGRADABLE'),
-('CL021','RAUL','PEREZ','M','21098765','911567890','AV.JAVIER PRADO 963','POCO AMABLE'),
-('CL022','VANESSA','GUTIERREZ','F','10987654','900678901','CALLE LOS OLMOS 174','MUY EDUCADA'),
-('CL023','HUGO','ESPINOZA','M','98765432','989789012','AV.BENAVIDES 285','GRUÑON'),
-('CL024','MONICA','RAMOS','F','87654320','978890123','JR.LORETO 396','SIEMPRE SONRIENTE'),
-('CL025','ANTONIO','DIAZ','M','76543219','967901234','AV.LA MARINA 417','MUY DESCONFIADO'),
-('CL026','ELIZABETH','CAMPOS','F','65432108','956012345','CALLE LAS FLORES 528','SUPER AMABLE'),
-('CL027','PABLO','VEGA','M','54321097','945123456','AV.GRAN CHIMU 639','TRANQUILO'),
-('CL028','ROXANA','MORALES','F','43210986','934234567','JR.TACNA 750','MUY QUEJOSA'),
-('CL029','DANIEL','ORTIZ','M','32109875','923345678','AV.PROLONGACION HUAYLAS 81','ALGO GROSERO'),
-('CL030','FIORELLA','NUNEZ','F','21098764','912456789','CALLE MONTE NEGRO 972','MUY DULCE'),
-('CL031','VICTOR','SALINAS','M','10987653','901567890','AV.LOS HEROES 183','SERIO Y FORMAL'),
-('CL032','MILAGROS','HERRERA','F','98765431','990678901','JR.WASHINGTON 294','ENCANTDORA')
+('CL001','MARIA','LOPEZ','F','45123452','968576549','AV VENEZUELA 357','Cliente frecuente y responsable'),
+('CL002','ALEX','TORRES','M','32198762','987694659','JR AGUSTINO 589','Cliente ocasional'),
+('CL003','ROSA','ALVARE','F','29876545','956674569','JR CASTILLA 102','Cliente reservada'),
+('CL004','NELLY','ELVIRA','F','41234565','956735456','AV TUPAC 894','Cliente amable'),
+('CL005','MILLY','MORENO','F','38765435','956455454','CALLE PERU 258','Cliente exigente'),
+('CL006','DEISY','ALVAREZ','F','27654321','954565767','JR TACNA 156','Cliente difícil'),
+('CL007','CARLOS','QUISPE','M','41256789','987123456','AV.ABANCAY 234','Cliente puntual'),
+('CL008','ANA','GARCIA','F','32145678','956234567','JR.HUALLAGA 456','Cliente muy amable'),
+('CL009','LUIS','MENDOZA','M','29876512','945345678','AV.AREQUIPA 789','Cliente poco comunicativo'),
+('CL010','PATRICIA','ROJAS','F','38712345','934456789','CALLE LOS PINOS 123','Cliente exigente'),
+('CL011','JORGE','FLORES','M','45678901','923567890','AV.BRASIL 567','Cliente impaciente'),
+('CL012','CARMEN','HUAMAN','F','34567890','912678901','JR.CUSCO 890','Cliente cordial'),
+('CL013','ROBERTO','CASTRO','M','23456789','901789012','AV.COLONIAL 321','Cliente desconfiado'),
+('CL014','LUCIA','VARGAS','F','12345698','998890123','CALLE LAS ROSAS 654','Cliente simpática'),
+('CL015','MIGUEL','PAREDES','M','87654321','977901234','AV.VENEZUELA 987','Cliente reservado'),
+('CL016','SANDRA','LEON','F','76543210','966012345','JR.AMAZONAS 147','Cliente quejosa'),
+('CL017','FERNANDO','REYES','M','65432109','955123456','AV.TUPAC AMARU 258','Cliente exigente'),
+('CL018','GLORIA','JIMENEZ','F','54321098','944234567','CALLE UNION 369','Cliente atenta'),
+('CL019','CESAR','TORRES','M','43210987','933345678','AV.UNIVERSITARIA 741','Cliente algo impaciente'),
+('CL020','DIANA','SILVA','F','32109876','922456789','JR.ICA 852','Cliente agradable'),
+('CL021','RAUL','PEREZ','M','21098765','911567890','AV.JAVIER PRADO 963','Cliente poco amable'),
+('CL022','VANESSA','GUTIERREZ','F','10987654','900678901','CALLE LOS OLMOS 174','Cliente educada'),
+('CL023','HUGO','ESPINOZA','M','98765432','989789012','AV.BENAVIDES 285','Cliente gruñón'),
+('CL024','MONICA','RAMOS','F','87654320','978890123','JR.LORETO 396','Cliente sonriente'),
+('CL025','ANTONIO','DIAZ','M','76543219','967901234','AV.LA MARINA 417','Cliente desconfiado'),
+('CL026','ELIZABETH','CAMPOS','F','65432108','956012345','CALLE LAS FLORES 528','Cliente muy amable'),
+('CL027','PABLO','VEGA','M','54321097','945123456','AV.GRAN CHIMU 639','Cliente tranquilo'),
+('CL028','ROXANA','MORALES','F','43210986','934234567','JR.TACNA 750','Cliente quejosa'),
+('CL029','DANIEL','ORTIZ','M','32109875','923345678','AV.PROLONGACION HUAYLAS 81','Cliente algo grosero'),
+('CL030','FIORELLA','NUNEZ','F','21098764','912456789','CALLE MONTE NEGRO 972','Cliente amable'),
+('CL031','VICTOR','SALINAS','M','10987653','901567890','AV.LOS HEROES 183','Cliente serio'),
+('CL032','MILAGROS','HERRERA','F','98765431','990678901','JR.WASHINGTON 294','Cliente encantadora');
 GO
 
-
-SELECT * FROM[dbo].[PROVEEDOR]
 ---------- REGISTRO DE PROVEEDOR -----
+
+
 INSERT INTO PROVEEDOR (COD_PROVEEDOR,NOMBRE,TELEFONO,CORREO,DIRECCION,RUC,OBSERVACIONES) VALUES
-('PR001','BACKUS','923456789','backus@gmail.com','AV.BRASIL 234','20123456789','MUY PUNTUAL'),
-('PR002','MONDELEZZ','923454647','mondelezz@gmail.com','AV.JAVIER PRADO 567','20567437364','MUY FORMAL'),
-('PR003','DON ITALIANO','976656879','donitaliano@gmail.com','JR.HUALLAGA 890','28778543029','ENTREGAS A TIEMPO'),
-('PR004','GLORIA','938745838','gloria@gmail.com','AV.AREQUIPA 123','23457632485','MUY CONFIABLE'),
-('PR005','ALICORP','945123678','alicorp@gmail.com','AV.REPUBLICA DE PANAMA 456','20100076136','PROVEEDOR ESTRELLA'),
-('PR006','LAIVE','934567891','laive@gmail.com','CALLE LOS LAURELES 789','20336472271','PRODUCTO DE CALIDAD'),
-('PR007','NESTLE','912345678','nestle@gmail.com','AV.LA MARINA 321','20261457682','MUY EXIGENTE'),
-('PR008','SAN FERNANDO','956781234','sanfernando@gmail.com','JR.TACNA 654','20414271014','ENTREGA RAPIDA'),
-('PR009','INCA KOLA','967890123','incakola@gmail.com','AV.COLONIAL 987','20100115477','ALGO IMPUNTUAL'),
-('PR010','PILSEN','978901234','pilsen@gmail.com','CALLE UNION 258','20603150954','BUEN TRATO'),
-('PR011','INKA CROPS','911234567','inkacrops@gmail.com','AV.PERU 123','20112233445','PUNTUAL'),
-('PR012','BIMBO','922345678','bimbo@gmail.com','AV.LIMA 456','20223344556','MUY FORMAL'),
-('PR013','LAIVE','933456789','laive2@gmail.com','JR.TACNA 789','20334455667','CONFIABLE'),
-('PR014','SAN FERNANDO','944567890','sf2@gmail.com','AV.BRASIL 321','20445566778','RAPIDO'),
-('PR015','DONOFRIO','955678901','donofrio@gmail.com','CALLE UNION 654','20556677889','MUY BUENO'),
-('PR016','MOLIALIA','966789012','molitalia@gmail.com','AV.COLONIAL 987','20667788990','PUNTUAL'),
-('PR017','SAPOLIO','977890123','sapolio@gmail.com','JR.IC 147','20778899001','BUENA CALIDAD'),
-('PR018','HEAD SHOULDERS','988901234','hs@gmail.com','AV.TUAC 258','20889900112','FORMAL'),
-('PR019','COSTA','999012345','costa@gmail.com','AV.VENEZLA 369','20990011223','MUY PEDIDO'),
-('PR020','NESTLE PERU','910123456','nestle2@gmail.com','AV.JAVR PRADO 741','20101122334','EXIGENTE')
+('PR001','SODIMAC','900111222','sodimac@gmail.com','AV. INDUSTRIAL 123','20111111111','CONSTRUCCION'),
+('PR002','MAESTRO','900222333','maestro@gmail.com','AV. UNIVERSITARIA 456','20222222222','CONSTRUCCION'),
+('PR003','BACKUS','900333444','backus@gmail.com','AV. ARGENTINA 789','20333333333','BEBIDAS'),
+('PR004','DASEA','900444555','dasea@gmail.com','JR. LIMA 321','20444444444','GOLOSINAS'),
+('PR005','GUMISA','900555666','gumisa@gmail.com','AV. PERU 654','20555555555','GOLOSINAS'),
+('PR006','VEGA','900666777','vega@gmail.com','AV. NICOLAS AYLLON 987','20666666666','ABARROTES'),
+('PR007','KR','900777888','kr@gmail.com','AV. BRASIL 741','20777777777','GASEOSAS'),
+('PR008','FERRONORTE','900888999','ferronorte@gmail.com','JR. TACNA 852','20888888888','GOLOSINAS'),
+('PR009','TAYLOY','900999000','tayloy@gmail.com','AV. AREQUIPA 963','20999999999','UTILES'),
+('PR010','INKAFARMA','911000111','inkafarma@gmail.com','AV. SALAVERRY 159','20101010101','MEDICAMENTOS');
 GO
 
-SELECT * FROM[dbo].[CATEGORIA]
+
 ------ REGISTRO DE CATEGORIA------
+
+
 INSERT INTO CATEGORIA (COD_CATEGORIA,NOMBRE,DESCRIPCION,OBSERVACIONES) VALUES
-('CT001','LACTEOS','','MUY DEMANDADO'),
-('CT002','UTILES','','POCO DEMANDADO'),
-('CT003','MEDICAMENTOS','','DEMANDADO'),
-('CT004','GALLETAS','','MUY DEMANDADO'),
-('CT005','ABARROTES','','MUY DEMANDADO'),
-('CT006','LICORES','','PCO NDADO'),
-('CT007','ENLATADOS','','DEMANDADO'),
-('CT008','SNACKS','','MUY DEADO'),
-('CT010','GOLOSINAS','','MUY DEMANDADO'),
-('CT011','EMBUTIDOS','','MU DEMDADO'),
-('CT012','PANADERIA','','MUY DEMANDAO'),
-('CT013','CONGELADOS','','POCO DEMANDADO'),
-('CT014','CEREALES','','DEMANO'),
-('CT015','CONDIMENTOS','','MUY DEMANDADO'),
-('CT016','HIGIENE PERSONAL','','DEMADO'),
-('CT017','BEBIDAS','','MUY DEMANDADO'),
-('CT018','LIMPIEZA','','DEMA'),
-('CT019','CONSERVAS','','DEMANDADO'),
-('CT020','JUGOS','Jugos naturales y artificiales','MUY DEMANDADO')
+('CT001','CEMENTO','Material de construccion','ALTA DEMANDA'),
+('CT002','LADRILLOS','Material de obra','ALTA DEMANDA'),
+('CT003','HERRAMIENTAS','Construccion','USO FRECUENTE'),
+('CT004','CERVEZAS','Bebidas alcoholicas','ALTA DEMANDA'),
+('CT005','GASEOSAS','Bebidas','ALTA DEMANDA'),
+('CT006','CHOCOLATES','Golosinas','ALTA DEMANDA'),
+('CT007','CARAMELOS','Golosinas','ALTA DEMANDA'),
+('CT008','SNACKS','Golosinas','ALTA DEMANDA'),
+('CT009','ARROZ','Abarrotes','CONSUMO DIARIO'),
+('CT010','AZUCAR','Abarrotes','CONSUMO DIARIO'),
+('CT011','ACEITES','Abarrotes','COCINA'),
+('CT012','FIDEOS','Abarrotes','COCINA'),
+('CT013','CUADERNOS','Utiles escolares','TEMPORADA'),
+('CT014','LAPICES','Utiles escolares','TEMPORADA'),
+('CT015','REGLAS','Utiles escolares','TEMPORADA'),
+('CT016','MEDICINAS','Medicamentos','ESENCIAL'),
+('CT017','JARABES','Medicamentos','SALUD'),
+('CT018','DESINFECTANTES','Medicamentos','HIGIENE'),
+('CT019','CLAVOS','Construccion','USO FRECUENTE'),
+('CT020','ARENA','Construccion','OBRAS');
 GO
 
 
-SELECT * FROM[dbo].[MARCA]
 ------ REGISTRO DE MARCA-----
-INSERT INTO MARCA (COD_MARCA,NOMBRE,DESCRIPCION,OBSERVACIONES) VALUES
-('M001','GLORIA','LA LECHE CON PODER DEL MERACADO',''),
-('M002','PILSEN','LAS MAS PEDIDAD XD',''),
-('M003','ALICORP','MASOMENOS',''),
-('M004','FLORIDA','BUENA MARCA',''),
-('M005','CORONA','VERCION NEGRA',''),
-('M006','CRISTAL','LA DE TRIGO',''),
-('M007','COSTA','SOLO GALLETA DE CHOCOALTE',''),
-('M008','FABER CASTELL','','POCO DEMANDADO'),
-('M009','ARTESCO','','DEMANDADO'),
-('M010','ARTESCO','CUADERNOS Y UTILES','DEMANDADO'),
-('M011','ARTESCO','CUADERNOS Y UTILES','DEMANDADO'),
-('M012','DONOFRIO','HELADOS Y GOLOSINAS','MUY DEMANDADO'),
-('M013','SAN FERNANDO','CARNES Y EMBUTIDOS','MUY DEMANDADO'),
-('M014','LAIVE','LACTEOS Y EMBUTIDOS','DEMANDADO'),
-('M015','NESTLE','CHOCOLATES Y CEREALES','MUY DEMANDADO'),
-('M016','BIMBO','PANES Y PASTELES','DEMANDADO'),
-('M017','SAPOLIO','LIMPIEZA Y DESINFECCION','POCO DEMANDADO'),
-('M018','HEAD SHOULDERS','CUIDADO CAPILAR','POCO DEMANDADO'),
-('M019','MOLITALIA','FIDEOS Y PASTAS','MUY DEMANDADO'),
-('M020','INKA CROPS','Snacks y frituras peruanas','MUY DEMANDADO')
 
+
+INSERT INTO MARCA (COD_MARCA,NOMBRE,DESCRIPCION,OBSERVACIONES) VALUES
+('M001','SOL','Cemento',''),
+('M002','LARK','Ladrillos',''),
+('M003','TRUPER','Herramientas',''),
+('M004','CRISTAL','Cerveza',''),
+('M005','PILSEN','Cerveza',''),
+('M006','INKA KOLA','Gaseosa',''),
+('M007','COCA COLA','Gaseosa',''),
+('M008','SUBLIME','Chocolate',''),
+('M009','CAÑONAZO','Chocolate',''),
+('M010','COSTEÑO','Arroz',''),
+('M011','RUBIA','Azucar',''),
+('M012','PRIMOR','Aceite',''),
+('M013','MOLITALIA','Fideos',''),
+('M014','FABER CASTELL','Utiles',''),
+('M015','ARTESCO','Utiles',''),
+('M016','PANADOL','Medicamento',''),
+('M017','VICK','Medicamento',''),
+('M018','CLOROX','Desinfectante',''),
+('M019','ACEROS AREQUIPA','Construccion',''),
+('M020','UNICON','Construccion','');
 GO
-SELECT * FROM[dbo].[PRODUCTO]
+
 ---- REGISTRO DE PRODUCTO-------
 
+
 INSERT INTO PRODUCTO (COD_PRODUCTO,NOMBRE,PRECIO,DESCRIPCION,OBSERVACIONES,PRO_CAT,PRO_MAR,PRO_PROV) VALUES
-('P001','Leche 1L',4.00,'Leche entera pasteurisada con vitaminas A y D','Producto estella','CT001','M001','PR004'),
-('P002','Pilsen 1L',7.50,'Cerveza rubia de malta selecionada, refrescante con 4.5 grados','Baja rotacion los lunes','CT006','M002','PR001'),
-('P003','Cristal 1L',7.50,'Cerveza de sevada premiu','Venta solo fines de semana','CT006','M006','PR001'),
-('P004','Leche 170gr',2.00,'Leche evaporada semidecremada, rica','Alta deanda','CT001','M001','PR004'),
-('P005','Tallarines 1kg',4.50,'Pasta de trigo duro laminada en fio','Se agta rapido','CT005','M003','PR003'),
-('P006','Macarrones 500gr',5.50,'Pasta corta de semola de trigo','Buena salida en invierno','CT005','M003','PR003'),
-('P007','Galleta soda',1.00,'Galleta salada horneada con haina','Favorito de los niños','CT004','M007','PR002'),
-('P008','Galleta ritz',1.50,'Galleta orneada con toque de manteqilla','Muy soliSitado','CT004','M007','PR002'),
-('P009','Corona personal',4.50,'Cerveza importada tip lager','Poca salida','CT006','M005','PR001'),
-('P010','Atun Gloria',4.50,'Atun en trozos con aceite vegeta','Producto basico','CT007','M001','PR001'),
-('P011','Yogurt fresa',3.50,'Yogurt batido con trozos d freza natural','Muy pedido por señoras','CT001','M001','PR004'),
-('P012','Aceite primor 1L',8.00,'Aceite vegetal de jirasol si colesterol','Esencal en cocina','CT005','M003','PR003'),
-('P013','Arroz extra 1kg',3.80,'Arroz blanco de grano lago','Nunca falta en tieda','CT005','M003','PR003'),
-('P014','Azucar rubia 1kg',3.50,'Azucar rubia sin refinar','Consumo diario','CT005','M003','PR003'),
-('P015','Galleta oreo',2.50,'Galleta de chocolate, pack de 6 unidades','Preferida por jovenes','CT004','M006','PR002'),
-('P016','Mantequilla 200gr',5.50,'Mantequilla con sal elabOrada','Rotacion morada','CT001','M001','PR004'),
-('P017','Queso gouda 200gr',8.50,'Queso maduro de origen hoandes','Producto premiun','CT001','M004','PR004'),
-('P018','Jamon del pais',6.00,'Jamon cosido de cerdo, corte en fetas','Comra semanal','CT008','M004','PR004'),
-('P019','Salchicha 200gr',5.00,'Salchicha frankfurt de polO','Acompaña el desayuno','CT008','M008','PR004'),
-('P020','Panetone 900gr',25.00,'Panetone esponjoso con pasas y fruta','Solo etemporada navidena','CT002','M008','PR002'),
-('P021','Chocolate sublime',1.50,'Chocolate con leche relleno de mani','Golosina de toda la vida','CT010','M008','PR002'),
-('P022','Chocolate princesa',1.00,'Bombon de chocolate blanco','Muy comprado por nios','CT010','M008','PR002'),
-('P023','Lapiz faber 2B',0.50,'Lapiz de grafito exagonal 2B, traz','Util escoar bsico','CT002','M009','PR005'),
-('P024','Cuaderno 100h',3.50,'Cuaderno rayado de 100 ojas bond 75gr','Temporda escolar alta','CT002','M009','PR005'),
-('P025','Folder manila A4',1.00,'Folder de cartulina manila A4 resistent','Poco reqerido','CT002','M009','PR005'),
-('P026','Detergente 500gr',4.50,'Deterjente en polvo con ensimas activas','Rotaion cnstnte','CT010','M003','PR003'),
-('P027','Lejia clorox 1L',3.50,'Lejia blanqueadora con poder desinfectante','Prodcto e','CT001','M003','PR003'),
-('P028','Shampoo 400ml',12.00,'Sampoo con proteinas de seda y keratina','Compra menual','CT010','M005','PR005'),
-('P029','Jabon bolivar',1.50,'Jabon de lavar multiusos con glicerina activa','Econmico','CT008','M003','PR003'),
-('P030','Papel hig. 4 rollos',8.50,'Papel igienico doble hoja ultra suave, 200 ojas','Infaltable en el hogar','CT010','M005','PR005')
+('P001','Cemento 50kg',28.00,'Cemento resistente','Construccion','CT001','M001','PR001'),
+('P002','Ladrillo King Kong',1.20,'Ladrillo rojo','Construccion','CT002','M002','PR002'),
+('P003','Martillo',25.00,'Herramienta de acero','Uso general','CT003','M003','PR001'),
+('P004','Taladro',120.00,'Taladro electrico','Uso profesional','CT003','M003','PR002'),
+('P005','Cerveza Cristal 650ml',7.50,'Cerveza rubia','Alta venta','CT004','M004','PR003'),
+('P006','Cerveza Pilsen 650ml',7.50,'Cerveza lager','Popular','CT004','M005','PR003'),
+('P007','Inka Kola 500ml',3.00,'Gaseosa','Alta rotacion','CT005','M006','PR007'),
+('P008','Coca Cola 500ml',3.50,'Gaseosa','Popular','CT005','M007','PR007'),
+('P009','Inka Kola 1.5L',6.50,'Gaseosa grande','Familiar','CT005','M006','PR007'),
+('P010','Coca Cola 1.5L',7.00,'Gaseosa grande','Familiar','CT005','M007','PR007'),
+('P011','Chocolate Sublime',1.50,'Chocolate con mani','Venta alta','CT006','M008','PR004'),
+('P012','Chocolate Princesa',1.00,'Chocolate blanco','Niños','CT006','M009','PR005'),
+('P013','Caramelos surtidos',2.50,'Dulces variados','Rapido','CT007','M008','PR008'),
+('P014','Galletas dulces',2.00,'Snack','Consumo diario','CT008','M009','PR005'),
+('P015','Arroz 1kg',4.00,'Arroz blanco','Basico','CT009','M010','PR006'),
+('P016','Azucar 1kg',3.50,'Azucar rubia','Consumo diario','CT010','M011','PR006'),
+('P017','Aceite 1L',8.00,'Aceite vegetal','Cocina','CT011','M012','PR006'),
+('P018','Fideos 500g',3.00,'Pasta','Cocina','CT012','M013','PR006'),
+('P019','Arroz 5kg',18.00,'Arroz grande','Familiar','CT009','M010','PR006'),
+('P020','Aceite 5L',35.00,'Aceite grande','Negocio','CT011','M012','PR006'),
+('P021','Cuaderno 100 hojas',3.50,'Cuaderno','Escolar','CT013','M015','PR009'),
+('P022','Lapiz 2B',0.50,'Lapiz','Escolar','CT014','M014','PR009'),
+('P023','Regla 30cm',1.50,'Regla plastica','Escolar','CT015','M015','PR009'),
+('P024','Colores x12',6.00,'Colores escolares','Escolar','CT014','M014','PR009'),
+('P025','Panadol 500mg',1.20,'Pastilla','Salud','CT016','M016','PR010'),
+('P026','Jarabe Vick',8.00,'Jarabe','Gripe','CT017','M017','PR010'),
+('P027','Alcohol 70%',5.00,'Desinfectante','Higiene','CT018','M018','PR010'),
+('P028','Lejia Clorox',5.00,'Desinfectante','Limpieza','CT018','M018','PR010'),
+('P029','Clavos 2 pulgadas',5.00,'Caja de clavos','Construccion','CT019','M019','PR001'),
+('P030','Arena fina',15.00,'Material de obra','Construccion','CT020','M020','PR002');
 GO
 
-SELECT * FROM INVENTARIO
+------REGISTRO DE INVENTARO------
+
+
 INSERT INTO INVENTARIO (COD_INVENTARIO,INV_PRO) VALUES
 ('I001','P002'),
 ('I002','P005'),
@@ -442,8 +429,10 @@ INSERT INTO INVENTARIO (COD_INVENTARIO,INV_PRO) VALUES
 ('I030','P030')
 GO
 
-SELECT * FROM[dbo].[PEDIDO]
+
 ------- REGISTRO DE PEDIDO------
+
+
 INSERT INTO PEDIDO (COD_PEDIDO,ESTADO,PED_CLI) VALUES
 ('PD001','ENTREGADO','CL002'),
 ('PD002','ENTREGADO','CL004'),
@@ -467,71 +456,57 @@ INSERT INTO PEDIDO (COD_PEDIDO,ESTADO,PED_CLI) VALUES
 ('PD020','PAUSA','CL020'),
 ('PD021','ENTREGADO','CL021'),
 ('PD022','PENDIENTE','CL022'),
-('PD023','ENTREGADO','CL021'),
+('PD023','ENTREGADO','CL023'),
 ('PD024','PAUSA','CL024'),
 ('PD025','ENTREGADO','CL025'),
 ('PD026','PENDIENTE','CL026'),
 ('PD027','ENTREGADO','CL027'),
 ('PD028','PAUSA','CL028'),
 ('PD029','ENTREGADO','CL029'),
-('PD030','PENDIENTE','CL015'),
-('PD031','ENTREGADO','CL031'),
-('PD032','PAUSA','CL032'),
-('PD033','ENTREGADO','CL007'),
-('PD034','PENDIENTE','CL016'),
-('PD035','ENTREGADO','CL009'),
-('PD036','ENTREGADO','CL001'),
-('PD037','PENDIENTE','CL005'),
-('PD038','ENTREGADO','CL010'),
-('PD039','PAUSA','CL003'),
-('PD040','ENTREGADO','CL015'),
-('PD041','PENDIENTE','CL008'),
-('PD042','ENTREGADO','CL020'),
-('PD043','PAUSA','CL002'),
-('PD044','ENTREGADO','CL012'),
-('PD045','PENDIENTE','CL007')
+('PD030','PENDIENTE','CL030'),
+('PD031', 'PENDIENTE', 'CL001')
 GO
 
+------REGISTRO DETALLE_PEDIDO------
 
-SELECT * FROM [dbo].[DETALLE_PEDIDO]
+
 INSERT INTO DETALLE_PEDIDO (CANTIDAD,DESCRIPCION,DET_PROD,DET_PED) VALUES
-(5,'Unidad de consumo diario','P001','PD003'),
-(6,'Bebida fria para reunion','P002','PD006'),
-(10,'Pasta para almuerzo familiar','P006','PD005'),
-(7,'Snack para lonchera','P007','PD004'),
-(8,'Bebida importada personal','P005','PD002'),
-(13,'Conserva rica en proteinas','P004','PD001'),
-(4,'Bebida rubia de cebada','P003','PD007'),
-(6,'Pasta larga para sopa','P005','PD008'),
-(3,'Galleta crocante con mantequilla','P008','PD009'),
-(9,'Lacteo batido sabor frutal','P011','PD010'),
-(5,'Grasa vegetal para cocinar','P012','PD011'),
-(7,'Cereal blanco de grano largo','P013','PD012'),
-(4,'Endulzante natural sin refinar','P014','PD013'),
-(8,'Galleta rellena de crema','P015','PD014'),
-(3,'Grasa animal para untar','P016','PD015'),
-(5,'Lacteo maduro de origen europeo','P017','PD016'),
-(6,'Embutido cosido en fetas','P018','PD017'),
-(4,'Embutido de pollo al vapor','P019','PD018'),
-(2,'Pan dulce con frutas confitadas','P020','PD019'),
-(10,'Golosina con mani tostado','P021','PD020'),
-(8,'Bombon de chocolate blanco','P022','PD021'),
-(6,'Instrumento de escritura 2B','P023','PD022'),
-(5,'Libreta escolar de 100 hojas','P024','PD023'),
-(4,'Archivador de cartulina A4','P025','PD024'),
-(7,'Polvo limpiador con enzimas','P026','PD025'),
-(3,'Liquido desinfectante al 5%','P027','PD026'),
-(5,'Cuidado capilar con keratina','P028','PD027'),
-(9,'Barra de lavado multiusos','P029','PD028'),
-(6,'Rollo higienico doble hoja','P030','PD029'),
-(4,'Lacteo evaporado semidescremado','P004','PD030'),
-(7,'Conserva marina en aceite','P010','PD031'),
-(5,'Snack salado horneado','P007','PD030')
+(5,'Compra de cemento','P001','PD003'),
+(6,'Compra de ladrillos','P002','PD006'),
+(10,'Compra de cerveza','P006','PD005'),
+(7,'Compra de gaseosa','P007','PD004'),
+(8,'Compra de cerveza','P005','PD002'),
+(13,'Compra de herramienta','P004','PD001'),
+(4,'Compra de herramienta','P003','PD007'),
+(6,'Compra de cerveza','P005','PD008'),
+(3,'Compra de gaseosa','P008','PD009'),
+(9,'Compra de chocolate','P011','PD010'),
+(5,'Compra de chocolate','P012','PD011'),
+(7,'Compra de caramelos','P013','PD012'),
+(4,'Compra de snacks','P014','PD013'),
+(8,'Compra de arroz','P015','PD014'),
+(3,'Compra de azucar','P016','PD015'),
+(5,'Compra de aceite','P017','PD016'),
+(6,'Compra de fideos','P018','PD017'),
+(4,'Compra de arroz','P019','PD018'),
+(2,'Compra de aceite','P020','PD019'),
+(10,'Compra de cuadernos','P021','PD020'),
+(6,'Compra de cemento','P001','PD021'),
+(8,'Compra de ladrillos','P002','PD022'),
+(5,'Compra de cerveza','P005','PD023'),
+(7,'Compra de gaseosa','P007','PD024'),
+(9,'Compra de chocolate','P011','PD025'),
+(4,'Compra de caramelos','P013','PD026'),
+(6,'Compra de arroz','P015','PD027'),
+(3,'Compra de aceite','P017','PD028'),
+(5,'Compra de cuadernos','P021','PD029'),
+(2,'Compra de medicamento','P025','PD030'),
+(5, 'Compra de cemento', 'P001', 'PD031'),
+(6, 'Compra de ladrillos', 'P002', 'PD031')
 
-
-
-SELECT * FROM[dbo].[VENTA]
 ----- REGISTRO DE VENTA ----
+
+
 INSERT INTO VENTA (COD_VENTA,TOTAL_VENTA,VEN_PED,VEN_EMP) VALUES
 ('V001',0,'PD001','E001'),
 ('V002',0,'PD002','E002'),
@@ -562,18 +537,20 @@ INSERT INTO VENTA (COD_VENTA,TOTAL_VENTA,VEN_PED,VEN_EMP) VALUES
 ('V027',0,'PD027','E002'),
 ('V028',0,'PD028','E003'),
 ('V029',0,'PD029','E001'),
-('V030',0,'PD030','E002')
+('V030',0,'PD030','E002'),
+('V031', 0, 'PD031', 'E001')
 
 
 ---- REGISTRO DE COMPROBANTE DE  PAGO --
-SELECT * FROM [dbo].[COMPROBANTE_PAGO]
+
+
 INSERT INTO COMPROBANTE_PAGO (COD_COMPRO_PAGO,COMPRO_VEN) VALUES
 ('CP001','V001'),
 ('CP002','V002'),
-('CP003','V004'),
-('CP004','V003'),
-('CP005','V006'),
-('CP006','V005'),
+('CP003','V003'),
+('CP004','V004'),
+('CP005','V005'),
+('CP006','V006'),
 ('CP007','V007'),
 ('CP008','V008'),
 ('CP009','V009'),
@@ -601,62 +578,357 @@ INSERT INTO COMPROBANTE_PAGO (COD_COMPRO_PAGO,COMPRO_VEN) VALUES
 
 ----  REGISTRO BOLETA ----
 
-SELECT * FROM [dbo].[BOLETA]
-INSERT INTO BOLETA (COD_BOLETA,BOLETA_COMPRO) VALUES
-('B001','CP001'),
-('B002','CP003'),
-('B003','CP005'),
-('B004','CP006'),
-('B005','CP004'),
-('B006','CP002'),
-('B007','CP007'),
-('B008','CP008'),
-('B009','CP009'),
-('B010','CP010'),
-('B011','CP011'),
-('B012','CP012'),
-('B013','CP013'),
-('B014','CP014'),
-('B015','CP015'),
-('B016','CP016'),
-('B017','CP017'),
-('B018','CP018'),
-('B019','CP019'),
-('B020','CP020'),
-('B021','CP021'),
-('B022','CP022'),
-('B023','CP023'),
-('B024','CP024'),
-('B025','CP025'),
-('B026','CP026'),
-('B027','CP027'),
-('B028','CP028'),
-('B029','CP029'),
-('B030','CP030')
-GO
+
+INSERT INTO BOLETA (COD_BOLETA, DESCRIPCION, BOLETA_COMPRO) VALUES
+('B001','Venta de cemento','CP001'),
+('B002','Venta de ladrillos','CP002'),
+('B003','Venta de cerveza','CP003'),
+('B004','Venta de gaseosa','CP004'),
+('B005','Venta de cerveza','CP005'),
+('B006','Venta de herramienta','CP006'),
+('B007','Venta de herramienta','CP007'),
+('B008','Venta de cerveza','CP008'),
+('B009','Venta de gaseosa','CP009'),
+('B010','Venta de chocolate','CP010'),
+('B011','Venta de chocolate','CP011'),
+('B012','Venta de caramelos','CP012'),
+('B013','Venta de snacks','CP013'),
+('B014','Venta de arroz','CP014'),
+('B015','Venta de azucar','CP015'),
+('B016','Venta de aceite','CP016'),
+('B017','Venta de fideos','CP017'),
+('B018','Venta de arroz','CP018'),
+('B019','Venta de aceite','CP019'),
+('B020','Venta de cuadernos','CP020'),
+('B021','Venta de lapices','CP021'),
+('B022','Venta de reglas','CP022'),
+('B023','Venta de colores','CP023'),
+('B024','Venta de medicamentos','CP024'),
+('B025','Venta de jarabe','CP025'),
+('B026','Venta de alcohol','CP026'),
+('B027','Venta de lejia','CP027'),
+('B028','Venta de clavos','CP028'),
+('B029','Venta de arena','CP029'),
+('B030','Venta de panadol','CP030');
 
 ------  REGISTRO DE FACTURA ------
+
+
+INSERT INTO FACTURA (COD_FACTURA,RUC_CLIENTE,RAZON_SOCIAL,DESCRIPCION,IGV,FACTURA_COMPRO) VALUES
+('F001','20123456781','EMPRESA SAC','Compra de materiales',0,'CP001'),
+('F002','20123456782','INVERSIONES SRL','Compra de bebidas',0,'CP002'),
+('F003','20123456783','COMERCIAL EIRL','Compra de snacks',0,'CP003'),
+('F004','20123456784','NEGOCIOS SAC','Compra de utiles',0,'CP004'),
+('F005','20123456785','DISTRIBUIDORA SRL','Compra de alimentos',0,'CP005'),
+('F006','20123456786','IMPORTACIONES SAC','Compra de gaseosas',0,'CP006'),
+('F007','20123456787','CORPORACION EIRL','Compra de chocolates',0,'CP007'),
+('F008','20123456788','SERVICIOS SRL','Compra de medicamentos',0,'CP008'),
+('F009','20123456789','SOLUCIONES SAC','Compra de abarrotes',0,'CP009'),
+('F010','20123456790','REPRESENTACIONES SRL','Compra de limpieza',0,'CP010'),
+('F011','20123456791','DISTRIBUCIONES SAC','Compra de arroz',0,'CP011'),
+('F012','20123456792','ALMACENES EIRL','Compra de aceite',0,'CP012'),
+('F013','20123456793','COMERCIO SRL','Compra de fideos',0,'CP013'),
+('F014','20123456794','INVERSIONES EIRL','Compra de gaseosas',0,'CP014'),
+('F015','20123456795','NEGOCIOS PERU SAC','Compra de dulces',0,'CP015'),
+('F016','20123456796','REPRESENTACIONES SAC','Compra de snacks',0,'CP016'),
+('F017','20123456797','SOLUCIONES EIRL','Compra de utiles',0,'CP017'),
+('F018','20123456798','CORPORACION SRL','Compra de bebidas',0,'CP018'),
+('F019','20123456799','NEGOCIOS EIRL','Compra de productos',0,'CP019'),
+('F020','20123456800','COMERCIAL SAC','Compra de varios',0,'CP020'),
+('F021','20123456801','EMPRESA UNO SAC','Compra de cemento',0,'CP021'),
+('F022','20123456802','EMPRESA DOS SAC','Compra de ladrillos',0,'CP022'),
+('F023','20123456803','EMPRESA TRES SAC','Compra de bebidas',0,'CP023'),
+('F024','20123456804','EMPRESA CUATRO SAC','Compra de gaseosas',0,'CP024'),
+('F025','20123456805','EMPRESA CINCO SAC','Compra de chocolates',0,'CP025'),
+('F026','20123456806','EMPRESA SEIS SAC','Compra de caramelos',0,'CP026'),
+('F027','20123456807','EMPRESA SIETE SAC','Compra de arroz',0,'CP027'),
+('F028','20123456808','EMPRESA OCHO SAC','Compra de aceite',0,'CP028'),
+('F029','20123456809','EMPRESA NUEVE SAC','Compra de utiles',0,'CP029'),
+('F030','20123456810','EMPRESA DIEZ SAC','Compra de medicamentos',0,'CP030')
+
+
+--------------- MOSTRAR TODAS LAS TABLAS --------------------------
+
+SELECT * FROM CARGO
+
+SELECT * FROM[dbo].[EMPLEADO]
+
+SELECT * FROM [dbo].[CLIENTE]
+
+SELECT * FROM[dbo].[PROVEEDOR]
+
+SELECT * FROM[dbo].[CATEGORIA]
+
+SELECT * FROM[dbo].[MARCA]
+
+SELECT * FROM[dbo].[PRODUCTO]
+
+SELECT * FROM INVENTARIO
+
+SELECT * FROM[dbo].[PEDIDO]
+
+SELECT * FROM [dbo].[DETALLE_PEDIDO]
+
+SELECT * FROM[dbo].[VENTA]
+
+SELECT * FROM [dbo].[COMPROBANTE_PAGO]
+
+SELECT * FROM [dbo].[BOLETA]
+
 SELECT * FROM [dbo].[FACTURA]
-INSERT INTO FACTURA (COD_FACTURA,RUC_CLIENTE,RAZON_SOCIAL,DESCRIPCION,FACTURA_COMPRO) VALUES
-('F001','20123456781','EMPRESA SAC','Compra de abarrotes','CP003'),
-('F002','20123456782','INVERSIONES SRL','Compra de lacteos','CP004'),
-('F003','20123456783','COMERCIAL EIRL','Compra de licores','CP007'),
-('F004','20123456784','NEGOCIOS SAC','Compra de galletas','CP008'),
-('F005','20123456785','DISTRIBUIDORA SRL','Compra de enlatados','CP009'),
-('F006','20123456786','IMPORTACIONES SAC','Compra de snacks','CP010'),
-('F007','20123456787','CORPORACION EIRL','Compra de utiles','CP011'),
-('F008','20123456788','SERVICIOS SRL','Compra de embutidos','CP012'),
-('F009','20123456789','SOLUCIONES SAC','Compra de golosinas','CP013'),
-('F010','20123456790','REPRESENTACIONES SRL','Compra de limpieza','CP014'),
-('F011','20123456791','DISTRIBUCIONES SAC','Compra de cereales','CP015'),
-('F012','20123456792','ALMACENES EIRL','Compra de conservas','CP016'),
-('F013','20123456793','COMERCIO SRL','Compra de lacteos','CP017'),
-('F014','20123456794','INVERSIONES EIRL','Compra de panaderia','CP018'),
-('F015','20123456795','NEGOCIOS PERU SAC','Compra de embutidos','CP019'),
-('F016','20123456796','REPRESENTACIONES SAC','Compra de abarrotes','CP020'),
-('F017','20123456797','SOLUCIONES EIRL','Compra de galletas','CP021'),
-('F018','20123456798','CORPORACION SRL','Compra de licores','CP022'),
-('F019','20123456799','NEGOCIOS EIRL','Compra de bebidas','CP023'),
-('F020','20123456800','COMERCIAL SAC','Compra de snacks','CP024')
+
+
+-----------------   CONSULTAS  BASICAS -------------------------
+
+--1
+SELECT COD_CLIENTE, NOMBRES, APELLIDOS FROM CLIENTE WHERE NOMBRES LIKE '%Y%' 
+--2
+SELECT COD_EMPLEADO, NOMBRES, APELLIDOS FROM EMPLEADO WHERE NOMBRES LIKE '%O'
+--3
+SELECT COD_MARCA, NOMBRE FROM MARCA ORDER BY NOMBRE DESC
+--4
+SELECT COD_PRODUCTO, NOMBRE, PRECIO FROM PRODUCTO WHERE PRECIO<4
+--5
+SELECT ID_DETALLE_PED, CANTIDAD FROM DETALLE_PEDIDO WHERE CANTIDAD>7
+--6
+SELECT COD_CATEGORIA, NOMBRE FROM CATEGORIA WHERE NOMBRE LIKE '%E%'
+--7
+SELECT COD_PROVEEDOR, NOMBRE FROM PROVEEDOR WHERE NOMBRE LIKE '_O%'
+--8
+SELECT COD_PRODUCTO, NOMBRE, PRECIO FROM PRODUCTO WHERE PRECIO BETWEEN 2 AND 7
+--9
+SELECT RAZON_SOCIAL FROM FACTURA ORDER BY RAZON_SOCIAL DESC 
+--10
+SELECT TOP 2 * FROM BOLETA WHERE DESCRIPCION LIKE '%A'
+--11
+SELECT NOMBRES,APELLIDOS FROM CLIENTE
+WHERE NOMBRES LIKE 'M%' AND COD_CLIENTE IN ( SELECT PED_CLI FROM PEDIDO )
+
+---12
+SELECT NOMBRE,PRECIO FROM PRODUCTO WHERE NOMBRE LIKE '%Cerveza%'
+AND COD_PRODUCTO IN ( SELECT DET_PROD FROM DETALLE_PEDIDO)
+
+---13
+SELECT NOMBRES,APELLIDOS FROM EMPLEADO WHERE NOMBRES LIKE '%o' AND COD_EMPLEADO IN 
+( SELECT VEN_EMP FROM VENTA)
+
+
+--14
+SELECT COD_PEDIDO,ESTADO FROM PEDIDO WHERE ESTADO LIKE 'ENTRE%'
+AND COD_PEDIDO IN ( SELECT DET_PED FROM DETALLE_PEDIDO)
+--15
+SELECT NOMBRES,APELLIDOS,DIRECCION FROM CLIENTE WHERE DIRECCION LIKE '%AV%'
+AND COD_CLIENTE IN ( SELECT PED_CLI FROM PEDIDO WHERE ESTADO = 'PENDIENTE')
+
+--16
+SELECT NOMBRES,APELLIDOS,TELEFONO FROM CLIENTE WHERE APELLIDOS LIKE '%EZ'
+AND COD_CLIENTE IN (  SELECT PED_CLI FROM PEDIDO  WHERE ESTADO = 'ENTREGADO'
+)
+
+------------------------ CONSULTAS AVANZADAS ---------------------------------------
+
+-- 1
+SELECT * FROM VENTA
+SELECT p.NOMBRE, c.NOMBRE, dp.CANTIDAD
+FROM DETALLE_PEDIDO dp
+INNER JOIN PRODUCTO p ON p.COD_PRODUCTO = dp.DET_PROD
+INNER JOIN CATEGORIA c ON c.COD_CATEGORIA = p.PRO_CAT
+INNER JOIN PEDIDO pd ON pd.COD_PEDIDO = dp.DET_PED
+
+---2
+
+SELECT c.NOMBRES,c.APELLIDOS,p.NOMBRE AS PRODUCTO,dp.CANTIDAD,
+dp.SUBTOTAL,pd.ESTADO
+FROM CLIENTE c
+INNER JOIN PEDIDO pd ON pd.PED_CLI = c.COD_CLIENTE
+INNER JOIN DETALLE_PEDIDO dp ON dp.DET_PED = pd.COD_PEDIDO
+INNER JOIN PRODUCTO p ON p.COD_PRODUCTO = dp.DET_PROD
+ORDER BY c.APELLIDOS ASC
+
+--3
+
+SELECT c.NOMBRES, c.APELLIDOS, pd.COD_PEDIDO,pd.ESTADO,
+p.NOMBRE AS PRODUCTO,cat.NOMBRE AS CATEGORIA, dp.CANTIDAD,
+dp.SUBTOTAL
+FROM CLIENTE c
+INNER JOIN PEDIDO pd ON pd.PED_CLI = c.COD_CLIENTE
+INNER JOIN DETALLE_PEDIDO dp ON dp.DET_PED = pd.COD_PEDIDO
+INNER JOIN PRODUCTO p ON p.COD_PRODUCTO = dp.DET_PROD
+INNER JOIN CATEGORIA cat ON cat.COD_CATEGORIA = p.PRO_CAT
+ORDER BY pd.ESTADO ASC
+
+
+
+--4
+SELECT pd.COD_PEDIDO,c.NOMBRES, c.APELLIDOS,p.NOMBRE AS PRODUCTO,
+dp.CANTIDAD,dp.SUBTOTAL, v.TOTAL_VENTA
+FROM PEDIDO pd
+INNER JOIN CLIENTE c ON c.COD_CLIENTE = pd.PED_CLI
+INNER JOIN DETALLE_PEDIDO dp ON dp.DET_PED = pd.COD_PEDIDO
+INNER JOIN PRODUCTO p ON p.COD_PRODUCTO = dp.DET_PROD
+INNER JOIN VENTA v ON v.VEN_PED = pd.COD_PEDIDO
+WHERE pd.COD_PEDIDO = 'PD031'
+
+
+
+
+----------------  CONSULTAS CON VISTAS  --------------
+
+
+--1
+SELECT dbo.CARGO.NOMBRE_CARGO, dbo.EMPLEADO.DNI, dbo.EMPLEADO.SEXO, 
+       dbo.VENTA.TOTAL_VENTA, dbo.VENTA.HORA
+FROM dbo.CARGO 
+INNER JOIN dbo.EMPLEADO ON dbo.CARGO.COD_CARGO = dbo.EMPLEADO.CAR_EMPLEA 
+INNER JOIN dbo.VENTA ON dbo.EMPLEADO.COD_EMPLEADO = dbo.VENTA.VEN_EMP
+WHERE dbo.EMPLEADO.SEXO = 'F'
+ORDER BY dbo.VENTA.TOTAL_VENTA DESC
+
+
+--2
+SELECT dbo.CARGO.NOMBRE_CARGO, dbo.EMPLEADO.DNI, dbo.EMPLEADO.SEXO, 
+       dbo.VENTA.TOTAL_VENTA, dbo.VENTA.HORA, dbo.PEDIDO.ESTADO, 
+       dbo.DETALLE_PEDIDO.CANTIDAD, dbo.DETALLE_PEDIDO.DESCRIPCION
+FROM dbo.CARGO 
+INNER JOIN dbo.EMPLEADO ON dbo.CARGO.COD_CARGO = dbo.EMPLEADO.CAR_EMPLEA 
+INNER JOIN dbo.VENTA ON dbo.EMPLEADO.COD_EMPLEADO = dbo.VENTA.VEN_EMP 
+INNER JOIN dbo.PEDIDO ON dbo.VENTA.VEN_PED = dbo.PEDIDO.COD_PEDIDO 
+INNER JOIN dbo.DETALLE_PEDIDO ON dbo.PEDIDO.COD_PEDIDO = dbo.DETALLE_PEDIDO.DET_PED
+WHERE dbo.PEDIDO.ESTADO = 'ENTREGADO'
+ORDER BY dbo.VENTA.TOTAL_VENTA DESC
+
+
+---3
+
+SELECT dbo.CARGO.NOMBRE_CARGO, dbo.EMPLEADO.DNI, dbo.EMPLEADO.SEXO, 
+       dbo.VENTA.HORA, dbo.PEDIDO.ESTADO, dbo.DETALLE_PEDIDO.CANTIDAD, 
+       dbo.PROVEEDOR.NOMBRE, dbo.PROVEEDOR.DIRECCION,
+       dbo.PRODUCTO.PRECIO, dbo.PRODUCTO.FECHA_REGISTRO, dbo.DETALLE_PEDIDO.SUBTOTAL
+FROM dbo.CARGO 
+INNER JOIN dbo.EMPLEADO ON dbo.CARGO.COD_CARGO = dbo.EMPLEADO.CAR_EMPLEA 
+INNER JOIN dbo.VENTA ON dbo.EMPLEADO.COD_EMPLEADO = dbo.VENTA.VEN_EMP 
+INNER JOIN dbo.PEDIDO ON dbo.VENTA.VEN_PED = dbo.PEDIDO.COD_PEDIDO 
+INNER JOIN dbo.DETALLE_PEDIDO ON dbo.PEDIDO.COD_PEDIDO = dbo.DETALLE_PEDIDO.DET_PED 
+INNER JOIN dbo.PRODUCTO ON dbo.DETALLE_PEDIDO.DET_PROD = dbo.PRODUCTO.COD_PRODUCTO 
+INNER JOIN dbo.PROVEEDOR ON dbo.PRODUCTO.PRO_PROV = dbo.PROVEEDOR.COD_PROVEEDOR 
+INNER JOIN dbo.COMPROBANTE_PAGO ON dbo.VENTA.COD_VENTA = dbo.COMPROBANTE_PAGO.COMPRO_VEN
+WHERE dbo.DETALLE_PEDIDO.SUBTOTAL > 10
+ORDER BY dbo.DETALLE_PEDIDO.SUBTOTAL DESC
+
+
+----------------  CONSULTAS CON AGRUPAMIENTO  -----------------
+
+
+--1
+SELECT c.NOMBRES,c.APELLIDOS,COUNT(pd.COD_PEDIDO) AS TOTALPEDIDOS
+FROM CLIENTE c
+INNER JOIN PEDIDO pd ON pd.PED_CLI = c.COD_CLIENTE
+GROUP BY c.NOMBRES, c.APELLIDOS
+ORDER BY TOTALPEDIDOS DESC
+
+--2
+SELECT cat.NOMBRE AS CATEGORIA,COUNT(p.COD_PRODUCTO) AS TOTALPRODUCTOS,
+AVG(p.PRECIO) AS PRECIOPROMEDIO FROM CATEGORIA cat
+INNER JOIN PRODUCTO p ON p.PRO_CAT = cat.COD_CATEGORIA
+GROUP BY cat.NOMBRE
+ORDER BY TOTALPRODUCTOS DESC
+
+--3
+SELECT e.NOMBRES, e.APELLIDOS, c.NOMBRE_CARGO, c.SUELDO
+FROM EMPLEADO e
+INNER JOIN CARGO c ON c.COD_CARGO = e.CAR_EMPLEA
+ORDER BY c.SUELDO DESC
+
+
+--4
+SELECT pr.NOMBRE AS PROVEEDOR,COUNT(p.COD_PRODUCTO) AS TOTAL_PRODUCTOS,
+AVG(p.PRECIO) AS PRECIO_PROMEDIO,MAX(p.PRECIO) AS PRECIO_MAS_ALTO
+FROM PROVEEDOR pr
+INNER JOIN PRODUCTO p ON p.PRO_PROV = pr.COD_PROVEEDOR
+GROUP BY pr.NOMBRE
+ORDER BY TOTAL_PRODUCTOS DESC
+
+
+----------------------  CONSULTAS CON FUCIONES ----------------------
+
+--1
+SELECT MAX(p.PRECIO) AS PRECIO_MASALTO,MIN(p.PRECIO) AS PRECIOMASBAJO, AVG(p.PRECIO) AS PRECIOPROMEDIO,
+SUM(p.PRECIO) AS SUMATOTAL FROM PRODUCTO p
+
+--2
+SELECT COUNT(COD_CLIENTE) AS TOTALCLIENTES
+FROM CLIENTE
+
+--3
+SELECT COUNT(COD_VENTA) AS TOTALVENTAS, SUM(TOTAL_VENTA) AS MONTOTOTAL
+FROM VENTA
+
+
+---4
+SELECT AVG(PRECIO) AS PROMEDIO
+FROM PRODUCTO
+
+
+--5
+SELECT ESTADO, COUNT(COD_PEDIDO) AS TOTAL
+fROM PEDIDO
+GROUP BY ESTADO
+
+
+-----------------   PROCEDIMIENTOS ALMACENADOS   ------------------------
+
+--1
+GO
+CREATE PROCEDURE PEDIDOS_ESTADO
+@ESTADO VARCHAR(20) AS
+BEGIN
+SELECT pd.COD_PEDIDO, c.NOMBRES, c.APELLIDOS, pd.ESTADO
+FROM PEDIDO pd
+INNER JOIN CLIENTE c ON c.COD_CLIENTE = pd.PED_CLI
+WHERE pd.ESTADO = @ESTADO
+END
+
+EXEC PEDIDOS_ESTADO 'PENDIENTE'
+
+----2
+GO
+CREATE PROCEDURE SP_BUSCAR_CLIENTE
+    @NOMBRE VARCHAR(50)
+AS
+BEGIN
+    SELECT COD_CLIENTE, NOMBRES, APELLIDOS, TELEFONO, DIRECCION
+    FROM CLIENTE
+    WHERE NOMBRES LIKE '%' + @NOMBRE + '%'
+END
+
+EXEC SP_BUSCAR_CLIENTE 'MIGUEL'
+
+---4
+GO
+CREATE PROCEDURE SP_VENTAS_EMPLEADO
+@COD_EMPLEADO CHAR(4) AS BEGIN
+SELECT v.COD_VENTA, e.NOMBRES, e.APELLIDOS, v.TOTAL_VENTA, v.HORA
+FROM VENTA v INNER JOIN EMPLEADO e ON e.COD_EMPLEADO = v.VEN_EMP
+WHERE v.VEN_EMP = @COD_EMPLEADO
+END
+
+EXEC SP_VENTAS_EMPLEADO 'E001'
+
+
+
+
+
+/* NUESTRA BASE  DE DATOS   CON EL NOMBRE BOTICA  FUE CONTRUIDO POR:
+Manuel Antonio Vargas Pérez
+Miguel Ángel Cruzado Torres
+GARCÍA NINA MARIA FERNANDA
+/*
+
+
+
+
+
+
+
 
 
