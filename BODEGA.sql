@@ -1,4 +1,4 @@
-   -- CREADO AL BASE DE DATOS DE BODEGA ----
+    -- CREADO AL BASE DE DATOS DE BODEGA ----
 
 
  CREATE DATABASE BODEGA
@@ -140,7 +140,7 @@ CREATE TABLE VENTA(
 COD_VENTA CHAR(4) PRIMARY KEY CHECK(COD_VENTA LIKE 'V[0-9][0-9][0-9]'),
 HORA TIME(0) DEFAULT(CAST(GETDATE() AS TIME)),
 TOTAL_VENTA DECIMAL(10,2) NOT NULL,
-VEN_PED INT(5) FOREIGN KEY REFERENCES PEDIDO(COD_PEDIDO),
+VEN_PED INT FOREIGN KEY REFERENCES PEDIDO(COD_PEDIDO),
 VEN_EMP CHAR(4) FOREIGN KEY REFERENCES EMPLEADO(COD_EMPLEADO)
 )
 GO
@@ -203,7 +203,7 @@ CANTIDAD INT NOT NULL,
 TOTAL DECIMAL(10,2),
 DESCRIPCION VARCHAR(50),
 DET_PROD CHAR(4) FOREIGN KEY REFERENCES PRODUCTO(COD_PRODUCTO),
-DET_PED INT(5) FOREIGN KEY REFERENCES PEDIDO(COD_PEDIDO)
+DET_PED INT FOREIGN KEY REFERENCES PEDIDO(COD_PEDIDO)
 )
 GO
 
@@ -434,7 +434,7 @@ GO
 ------- REGISTRO DE PEDIDO------
 
 
-INSERT INTO PEDIDO (COD_PEDIDO,ESTADO,PED_CLI) VALUES
+INSERT INTO PEDIDO (ESTADO,PED_CLI) VALUES
 ('ENTREGADO','CL002'),  
 ('ENTREGADO','CL004'),  
 ('ENTREGADO','CL005'),  
@@ -470,13 +470,13 @@ GO
 ------REGISTRO DETALLE_PEDIDO------
 
 
-INSERT INTO DETALLE_PEDIDO (CANTIDAD,DESCRIPCION,DET_PROD,DET_PED) VALUES
-(5, 'Pedido decemnto',     'P001', 3),
-(6, 'Pedido de lcambie os',   'P002', 6),
-(10,'Pedido de ceveza',     'P006', 5),
-(7, 'Pedido de gaseosa',     'P007', 4),
-(8, 'Pedido de cerveza',     'P005', 2),
+INSERT INTO DETALLE_PEDIDO (CANTIDAD, DESCRIPCION, DET_PROD, DET_PED) VALUES
 (13,'Pedidode de boetela', 'P004', 1),
+(8, 'Pedido de cerveza',     'P005', 2),
+(5, 'Pedido decemnto',     'P001', 3),
+(7, 'Pedido de gaseosa',     'P007', 4),
+(10,'Pedido de ceveza',     'P006', 5),
+(6, 'Pedido de lcambie os',   'P002', 6),
 (4, 'Pedido de que seraa', 'P003', 7),
 (6, 'Pedido de cerveza',     'P005', 8),
 (3, 'Pedido degaseosa',     'P008', 9),
@@ -500,9 +500,8 @@ INSERT INTO DETALLE_PEDIDO (CANTIDAD,DESCRIPCION,DET_PROD,DET_PED) VALUES
 (6, 'Pedido de arroz',       'P015', 27),
 (3, 'Pedido de aceite',      'P017', 28),
 (5, 'Pedido de cuadernos',   'P021', 29),
-(2, 'Pedido  medicoñonto', 'P025', 30),
-(5, 'pedido ahmaufuesao',     'P001', 31),
-(6, 'Pedido dde calleta',   'P002', 31)
+(2, 'Pedido  medicoñonto', 'P025', 30)
+
 
 ----- REGISTRO DE VENTA ----
 
@@ -537,8 +536,8 @@ INSERT INTO VENTA (COD_VENTA,TOTAL_VENTA,VEN_PED,VEN_EMP) VALUES
 ('V027',0,27,'E002'),
 ('V028',0,28,'E003'),
 ('V029',0,29,'E001'),
-('V030',0,30,'E002'),
-('V031',0,31,'E001')
+('V030',0,30,'E002')
+
 
 
 ---- REGISTRO DE COMPROBANTE DE  PAGO --
@@ -609,7 +608,7 @@ INSERT INTO BOLETA (COD_BOLETA, DESCRIPCION, BOLETA_COMPRO) VALUES
 ('B027','Venta de lejia','CP027'),
 ('B028','Venta de clavos','CP028'),
 ('B029','Venta de arena','CP029'),
-('B030','Venta de panadol','CP030');
+('B030','Venta de panadol','CP030')
 
 ------  REGISTRO DE FACTURA ------
 
@@ -923,6 +922,12 @@ Manuel Antonio Vargas Pérez
 Miguel Ángel Cruzado Torres
 GARCÍA NINA MARIA FERNANDA
 /*
+
+
+
+
+
+
 
 
 
