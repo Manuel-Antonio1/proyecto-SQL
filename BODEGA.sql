@@ -140,7 +140,7 @@ CREATE TABLE VENTA(
 COD_VENTA CHAR(4) PRIMARY KEY CHECK(COD_VENTA LIKE 'V[0-9][0-9][0-9]'),
 HORA TIME(0) DEFAULT(CAST(GETDATE() AS TIME)),
 TOTAL_VENTA DECIMAL(10,2) NOT NULL,
-VEN_PED CHAR(5) FOREIGN KEY REFERENCES PEDIDO(COD_PEDIDO),
+VEN_PED INT(5) FOREIGN KEY REFERENCES PEDIDO(COD_PEDIDO),
 VEN_EMP CHAR(4) FOREIGN KEY REFERENCES EMPLEADO(COD_EMPLEADO)
 )
 GO
@@ -186,8 +186,9 @@ GO
 
 CREATE TABLE INVENTARIO(
 COD_INVENTARIO CHAR(4) PRIMARY KEY CHECK(COD_INVENTARIO LIKE 'I[0-9][0-9][0-9]'),
+STOCK INT NOT NULL,
+STOCK_MINIMO INT,
 FECHA DATE DEFAULT(GETDATE()),
-FECHA_VEN DATE DEFAULT(DATEADD(DAY,10,GETDATE())),
 INV_PRO CHAR(4) FOREIGN KEY REFERENCES PRODUCTO(COD_PRODUCTO)
 )
 GO
@@ -202,13 +203,13 @@ CANTIDAD INT NOT NULL,
 TOTAL DECIMAL(10,2),
 DESCRIPCION VARCHAR(50),
 DET_PROD CHAR(4) FOREIGN KEY REFERENCES PRODUCTO(COD_PRODUCTO),
-DET_PED CHAR(5) FOREIGN KEY REFERENCES PEDIDO(COD_PEDIDO)
+DET_PED INT(5) FOREIGN KEY REFERENCES PEDIDO(COD_PEDIDO)
 )
 GO
 
 
 ----CREACION DEL TRIGGER   SUBTOTAL---
-GO
+/*GO
 CREATE TRIGGER TG_SUBTOTAL ON DETALLE_PEDIDO AFTER INSERT AS BEGIN
 UPDATE dp SET dp.SUBTOTAL = i.CANTIDAD * p.PRECIO FROM DETALLE_PEDIDO dp
 INNER JOIN inserted i ON dp.ID_DETALLE_PED = i.ID_DETALLE_PED
@@ -222,13 +223,13 @@ CREATE TRIGGER TG_VENTA ON VENTA AFTER INSERT AS BEGIN
 UPDATE v SET v.TOTAL_VENTA = (SELECT SUM(dp.SUBTOTAL)
 FROM DETALLE_PEDIDO dp WHERE dp.DET_PED = i.VEN_PED)
 FROM VENTA v INNER JOIN inserted i ON v.COD_VENTA = i.COD_VENTA
-END
+END*/
 
 
 ---- VER SI LSO TRIGGER SE CREARON -------------
 
-SELECT name , OBJECT_NAME(parent_id) AS Tabla
-FROM sys.triggers
+/*SELECT name , OBJECT_NAME(parent_id) AS Tabla
+FROM sys.triggers*/
 
 ----- REGISTRO DE CARGO ----------
 
@@ -361,10 +362,10 @@ GO
 
 
 INSERT INTO PRODUCTO (COD_PRODUCTO,NOMBRE,PRECIO,DESCRIPCION,OBSERVACIONES,PRO_CAT,PRO_MAR,PRO_PROV) VALUES
-('P001','Cemento 50kg',28.00,'Cemento resistente','Construccion','CT001','M001','PR001'),
-('P002','Ladrillo King Kong',1.20,'Ladrillo rojo','Construccion','CT002','M002','PR002'),
-('P003','Martillo',25.00,'Herramienta de acero','Uso general','CT003','M003','PR001'),
-('P004','Taladro',120.00,'Taladro electrico','Uso profesional','CT003','M003','PR002'),
+('P001','HAMURGUESAS',28.00,' las  mas demandad','Construccion','CT001','M001','PR001'),
+('P002','CALLETA MORROCHAS',1.20,'la morada','Construccion','CT002','M002','PR002'),
+('P003','Legia por botellas',25.00,'para pisoso','Uso general','CT003','M003','PR001'),
+('P004','Caja de leche',120.00,' leche por grupoo','Uso profesional','CT003','M003','PR002'),
 ('P005','Cerveza Cristal 650ml',7.50,'Cerveza rubia','Alta venta','CT004','M004','PR003'),
 ('P006','Cerveza Pilsen 650ml',7.50,'Cerveza lager','Popular','CT004','M005','PR003'),
 ('P007','Inka Kola 500ml',3.00,'Gaseosa','Alta rotacion','CT005','M006','PR007'),
@@ -396,37 +397,37 @@ GO
 ------REGISTRO DE INVENTARO------
 
 
-INSERT INTO INVENTARIO (COD_INVENTARIO,INV_PRO) VALUES
-('I001','P002'),
-('I002','P005'),
-('I003','P001'),
-('I004','P003'),
-('I005','P006'),
-('I006','P004'),
-('I007','P007'),
-('I008','P008'),
-('I009','P009'),
-('I010','P010'),
-('I011','P011'),
-('I012','P012'),
-('I013','P013'),
-('I014','P014'),
-('I015','P015'),
-('I016','P016'),
-('I017','P017'),
-('I018','P018'),
-('I019','P019'),
-('I020','P020'),
-('I021','P021'),
-('I022','P022'),
-('I023','P023'),
-('I024','P024'),
-('I025','P025'),
-('I026','P026'),
-('I027','P027'),
-('I028','P028'),
-('I029','P029'),
-('I030','P030')
+INSERT INTO INVENTARIO (COD_INVENTARIO,STOCK,STOCK_MINIMO,INV_PRO) VALUES
+('I001', 100, 10, 'P001'),
+('I002', 500, 50, 'P002'),
+('I003', 80,  10, 'P003'),
+('I004', 20,  5,  'P004'),
+('I005', 200, 20, 'P005'),
+('I006', 200, 20, 'P006'),
+('I007', 300, 30, 'P007'),
+('I008', 300, 30, 'P008'),
+('I009', 150, 15, 'P009'),
+('I010', 150, 15, 'P010'),
+('I011', 400, 40, 'P011'),
+('I012', 400, 40, 'P012'),
+('I013', 350, 35, 'P013'),
+('I014', 250, 25, 'P014'),
+('I015', 180, 20, 'P015'),
+('I016', 180, 20, 'P016'),
+('I017', 120, 15, 'P017'),
+('I018', 200, 25, 'P018'),
+('I019', 90,  10, 'P019'),
+('I020', 50,  5,  'P020'),
+('I021', 300, 30, 'P021'),
+('I022', 500, 50, 'P022'),
+('I023', 400, 40, 'P023'),
+('I024', 200, 20, 'P024'),
+('I025', 350, 35, 'P025'),
+('I026', 150, 15, 'P026'),
+('I027', 200, 20, 'P027'),
+('I028', 200, 20, 'P028'),
+('I029', 300, 30, 'P029'),
+('I030', 80,  10, 'P030')
 GO
 
 
@@ -434,111 +435,110 @@ GO
 
 
 INSERT INTO PEDIDO (COD_PEDIDO,ESTADO,PED_CLI) VALUES
-('PD001','ENTREGADO','CL002'),
-('PD002','ENTREGADO','CL004'),
-('PD003','ENTREGADO','CL005'),
-('PD004','ENTREGADO','CL006'),
-('PD005','ENTREGADO','CL003'),
-('PD006','ENTREGADO','CL001'),
-('PD007','PENDIENTE','CL007'),
-('PD008','PAUSA','CL008'),
-('PD009','ENTREGADO','CL009'),
-('PD010','PAUSA','CL010'),
-('PD011','PENDIENTE','CL011'),
-('PD012','ENTREGADO','CL012'),
-('PD013','PAUSA','CL013'),
-('PD014','ENTREGADO','CL014'),
-('PD015','PENDIENTE','CL015'),
-('PD016','PAUSA','CL005'),
-('PD017','ENTREGADO','CL017'),
-('PD018','PENDIENTE','CL018'),
-('PD019','ENTREGADO','CL019'),
-('PD020','PAUSA','CL020'),
-('PD021','ENTREGADO','CL021'),
-('PD022','PENDIENTE','CL022'),
-('PD023','ENTREGADO','CL023'),
-('PD024','PAUSA','CL024'),
-('PD025','ENTREGADO','CL025'),
-('PD026','PENDIENTE','CL026'),
-('PD027','ENTREGADO','CL027'),
-('PD028','PAUSA','CL028'),
-('PD029','ENTREGADO','CL029'),
-('PD030','PENDIENTE','CL030'),
-('PD031', 'PENDIENTE', 'CL001')
+('ENTREGADO','CL002'),  
+('ENTREGADO','CL004'),  
+('ENTREGADO','CL005'),  
+('ENTREGADO','CL006'),  
+('ENTREGADO','CL003'),  
+('ENTREGADO','CL001'), 
+('PENDIENTE','CL007'), 
+('ENTREGADO','CL009'),
+('PAUSA','CL010'),      
+('PENDIENTE','CL011'),  
+('ENTREGADO','CL012'),  
+('PAUSA','CL013'),      
+('ENTREGADO','CL014'),  
+('PENDIENTE','CL015'),  
+('PAUSA','CL005'),      
+('ENTREGADO','CL017'), 
+('PENDIENTE','CL018'),  
+('ENTREGADO','CL019'),  
+('PAUSA','CL020'),      
+('ENTREGADO','CL021'),  
+('PENDIENTE','CL022'),  
+('ENTREGADO','CL023'),  
+('PAUSA','CL024'),      
+('ENTREGADO','CL025'),  
+('PENDIENTE','CL026'),  
+('ENTREGADO','CL027'),  
+('PAUSA','CL028'),   
+('ENTREGADO','CL029'),  
+('PENDIENTE','CL030'),  
+('PENDIENTE','CL001') 
 GO
 
 ------REGISTRO DETALLE_PEDIDO------
 
 
 INSERT INTO DETALLE_PEDIDO (CANTIDAD,DESCRIPCION,DET_PROD,DET_PED) VALUES
-(5,'Compra de cemento','P001','PD003'),
-(6,'Compra de ladrillos','P002','PD006'),
-(10,'Compra de cerveza','P006','PD005'),
-(7,'Compra de gaseosa','P007','PD004'),
-(8,'Compra de cerveza','P005','PD002'),
-(13,'Compra de herramienta','P004','PD001'),
-(4,'Compra de herramienta','P003','PD007'),
-(6,'Compra de cerveza','P005','PD008'),
-(3,'Compra de gaseosa','P008','PD009'),
-(9,'Compra de chocolate','P011','PD010'),
-(5,'Compra de chocolate','P012','PD011'),
-(7,'Compra de caramelos','P013','PD012'),
-(4,'Compra de snacks','P014','PD013'),
-(8,'Compra de arroz','P015','PD014'),
-(3,'Compra de azucar','P016','PD015'),
-(5,'Compra de aceite','P017','PD016'),
-(6,'Compra de fideos','P018','PD017'),
-(4,'Compra de arroz','P019','PD018'),
-(2,'Compra de aceite','P020','PD019'),
-(10,'Compra de cuadernos','P021','PD020'),
-(6,'Compra de cemento','P001','PD021'),
-(8,'Compra de ladrillos','P002','PD022'),
-(5,'Compra de cerveza','P005','PD023'),
-(7,'Compra de gaseosa','P007','PD024'),
-(9,'Compra de chocolate','P011','PD025'),
-(4,'Compra de caramelos','P013','PD026'),
-(6,'Compra de arroz','P015','PD027'),
-(3,'Compra de aceite','P017','PD028'),
-(5,'Compra de cuadernos','P021','PD029'),
-(2,'Compra de medicamento','P025','PD030'),
-(5, 'Compra de cemento', 'P001', 'PD031'),
-(6, 'Compra de ladrillos', 'P002', 'PD031')
+(5, 'Pedido decemnto',     'P001', 3),
+(6, 'Pedido de lcambie os',   'P002', 6),
+(10,'Pedido de ceveza',     'P006', 5),
+(7, 'Pedido de gaseosa',     'P007', 4),
+(8, 'Pedido de cerveza',     'P005', 2),
+(13,'Pedidode de boetela', 'P004', 1),
+(4, 'Pedido de que seraa', 'P003', 7),
+(6, 'Pedido de cerveza',     'P005', 8),
+(3, 'Pedido degaseosa',     'P008', 9),
+(9, 'Pedido de chocolate',   'P011', 10),
+(5, 'Pedido de choolate',   'P012', 11),
+(7, 'Pedido de caramelos',   'P013', 12),
+(4, 'Pedid desnacks',      'P014', 13),
+(8, 'Pedidode aroz',       'P015', 14),
+(3, 'Pedido de azucar',      'P016', 15),
+(5, 'Pedido de ceite',      'P017', 16),
+(6, 'Peddo de fideos',      'P018', 17),
+(4, 'Pedido e arro',       'P019', 18),
+(2, 'Pedido de aceoño',      'P020', 19),
+(10,'Pedido de cuadernos',   'P021', 20),
+(6, 'Pedido de atyudao',     'P001', 21),
+(8, 'Pedidode carreas',   'P002', 22),
+(5, 'Pedido de cerveza',     'P005', 23),
+(7, 'Pedido de asosa',     'P007', 24),
+(9, 'Pedido de chocolate',   'P011', 25),
+(4, 'Pedido de carmelos',   'P013', 26),
+(6, 'Pedido de arroz',       'P015', 27),
+(3, 'Pedido de aceite',      'P017', 28),
+(5, 'Pedido de cuadernos',   'P021', 29),
+(2, 'Pedido  medicoñonto', 'P025', 30),
+(5, 'pedido ahmaufuesao',     'P001', 31),
+(6, 'Pedido dde calleta',   'P002', 31)
 
 ----- REGISTRO DE VENTA ----
 
 
 INSERT INTO VENTA (COD_VENTA,TOTAL_VENTA,VEN_PED,VEN_EMP) VALUES
-('V001',0,'PD001','E001'),
-('V002',0,'PD002','E002'),
-('V003',0,'PD003','E001'),
-('V004',0,'PD004','E003'),
-('V005',0,'PD005','E002'),
-('V006',0,'PD006','E001'),
-('V007',0,'PD007','E003'),
-('V008',0,'PD008','E002'),
-('V009',0,'PD009','E001'),
-('V010',0,'PD010','E003'),
-('V011',0,'PD011','E001'),
-('V012',0,'PD012','E002'),
-('V013',0,'PD013','E003'),
-('V014',0,'PD014','E001'),
-('V015',0,'PD015','E002'),
-('V016',0,'PD016','E003'),
-('V017',0,'PD017','E001'),
-('V018',0,'PD018','E002'),
-('V019',0,'PD019','E003'),
-('V020',0,'PD020','E001'),
-('V021',0,'PD021','E002'),
-('V022',0,'PD022','E003'),
-('V023',0,'PD023','E001'),
-('V024',0,'PD024','E002'),
-('V025',0,'PD025','E003'),
-('V026',0,'PD026','E001'),
-('V027',0,'PD027','E002'),
-('V028',0,'PD028','E003'),
-('V029',0,'PD029','E001'),
-('V030',0,'PD030','E002'),
-('V031', 0, 'PD031', 'E001')
+('V001',0,1, 'E001'),
+('V002',0,2, 'E002'),
+('V003',0,3, 'E001'),
+('V004',0,4, 'E003'),
+('V005',0,5, 'E002'),
+('V006',0,6, 'E001'),
+('V007',0,7, 'E003'),
+('V008',0,8, 'E002'),
+('V009',0,9, 'E001'),
+('V010',0,10,'E003'),
+('V011',0,11,'E001'),
+('V012',0,12,'E002'),
+('V013',0,13,'E003'),
+('V014',0,14,'E001'),
+('V015',0,15,'E002'),
+('V016',0,16,'E003'),
+('V017',0,17,'E001'),
+('V018',0,18,'E002'),
+('V019',0,19,'E003'),
+('V020',0,20,'E001'),
+('V021',0,21,'E002'),
+('V022',0,22,'E003'),
+('V023',0,23,'E001'),
+('V024',0,24,'E002'),
+('V025',0,25,'E003'),
+('V026',0,26,'E001'),
+('V027',0,27,'E002'),
+('V028',0,28,'E003'),
+('V029',0,29,'E001'),
+('V030',0,30,'E002'),
+('V031',0,31,'E001')
 
 
 ---- REGISTRO DE COMPROBANTE DE  PAGO --
